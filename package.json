@@ -1,0 +1,27 @@
+{
+	"name": "nodejs-blog-app",
+	"version": "1.0.0",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/thebeliever1812/nodejs-blog-app.git"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/thebeliever1812/nodejs-blog-app/issues"
+	},
+	"homepage": "https://github.com/thebeliever1812/nodejs-blog-app#readme",
+	"description": "",
+	"dependencies": {
+		"ejs": "^3.1.10",
+		"express": "^5.1.0",
+		"mongoose": "^8.16.5"
+	},
+	"devDependencies": {
+		"nodemon": "^3.1.10"
+	}
+}
