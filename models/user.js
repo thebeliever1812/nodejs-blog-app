@@ -18,7 +18,6 @@ const userSchema = new Schema(
 		},
 		salt: {
 			type: String,
-			required: true,
 		},
 		profileImage: {
 			type: String,
@@ -47,6 +46,22 @@ userSchema.pre("save", function (next) {
 	this.password = hashedPassword;
 
 	next();
+});
+
+userSchema.static("matchPassword", async function ({ email, password }) {
+	const user = await this.findOne({ email });
+	if (!user) {
+		throw new Error("Error 404: User Not Found");
+	}
+
+	const hashLoginPassword = createHmac("sha256", user.salt)
+		.update(password)
+		.digest("hex");
+
+	if (hashLoginPassword !== user.password) {
+		throw new Error("Error 400: Incorrect Password");
+	}
+	return user;
 });
 
 const User = model("user", userSchema);
