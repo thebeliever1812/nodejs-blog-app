@@ -2,6 +2,8 @@ const express = require("express");
 const path = require("path");
 const userRoute = require("./routes/user");
 const { connect } = require("mongoose");
+const cookieParser = require("cookie-parser");
+const { checkForUserAuthentication } = require("./middlewares/authentication");
 
 const app = express();
 const port = 8000;
@@ -15,12 +17,17 @@ app.use(
 	express.static(path.join(__dirname, "node_modules/bootstrap/dist"))
 );
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, "public")));
+app.use(checkForUserAuthentication);
 
 app.set("view engine", "ejs");
 app.set("views", path.resolve("./views"));
 
 app.get("/", (req, res) => {
-	res.render("home");
+	res.render("home", {
+		user: req.user
+	});
 });
 
 app.use("/user", userRoute);

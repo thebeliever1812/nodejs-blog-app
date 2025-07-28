@@ -19,6 +19,12 @@ router.post("/signup", async (req, res) => {
 				error: "All fields required",
 			});
 		}
+
+		const existingUser = await User.findOne({ email });
+		if (existingUser) {
+			return res.render("signup", { error: "Email already in use" });
+		}
+
 		await User.create({
 			fullName,
 			email,
@@ -51,6 +57,10 @@ router.post("/signin", async (req, res) => {
 			error: error.message,
 		});
 	}
+});
+
+router.get("/logout", (req, res, next) => {
+	res.clearCookie("userAuthToken").redirect("/");
 });
 
 module.exports = router;

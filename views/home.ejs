@@ -5,6 +5,10 @@
 		<%- include("./partials/head") %>
 	</head>
 	<body>
-		<%- include("./partials/nav") %> <%- include("./partials/scripts") %>
+		<%- include("./partials/nav") %> 
+		<% if (locals.user) { %>
+		<p><%= JSON.stringify(user) %></p>
+		<% } %>
+		<%- include("./partials/scripts") %>
 	</body>
 </html>

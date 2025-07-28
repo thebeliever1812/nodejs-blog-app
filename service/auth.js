@@ -2,8 +2,10 @@ const jwt = require("jsonwebtoken");
 const secret = "Basir@admin";
 
 function getTokenForUser(user) {
+	console.log(user)
 	const payload = {
 		_id: user._id,
+		fullName: user.fullName,
 		email: user.email,
 		profileImage: user.profileImage,
 		role: user.role,
