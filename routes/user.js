@@ -1,6 +1,4 @@
 const { Router } = require("express");
-const { createHmac } = require("crypto");
-
 const User = require("../models/user");
 
 const router = Router();
@@ -42,12 +40,13 @@ router.post("/signin", async (req, res) => {
 			throw new Error("All fields are required");
 		}
 
-        const user = await User.matchPassword({ email, password });
-        // Generate Token
+		const token = await User.matchPasswordAndReturnToken({ email, password });
+		res.cookie("userAuthToken", token, {
+			maxAge: 24 * 60 * 60 * 1000,
+		});
 
 		return res.redirect("/");
 	} catch (error) {
-		console.log("Error in signin:", error);
 		return res.render("signin", {
 			error: error.message,
 		});

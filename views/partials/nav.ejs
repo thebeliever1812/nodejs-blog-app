@@ -41,3 +41,10 @@
 		</div>
 	</div>
 </nav>
+<div class="container mt-4">
+	<% if (locals.error) { %>
+	<div class="alert alert-danger p-2 d-flex justify-content-start align-items-center" role="alert">
+		<p class="mb-0"><%= error %></p>
+	</div>
+	<% } %>
+</div>
