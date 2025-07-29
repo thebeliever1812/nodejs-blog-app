@@ -4,6 +4,7 @@ const userRoute = require("./routes/user");
 const { connect } = require("mongoose");
 const cookieParser = require("cookie-parser");
 const { checkForUserAuthentication } = require("./middlewares/authentication");
+const blogRoute = require("./routes/blog");
 
 const app = express();
 const port = 8000;
@@ -31,6 +32,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/user", userRoute);
+app.use("/blog", blogRoute);
 
 app.listen(port, (err) => {
 	if (err) {

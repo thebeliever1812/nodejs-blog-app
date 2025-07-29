@@ -59,8 +59,10 @@ router.post("/signin", async (req, res) => {
 	}
 });
 
-router.get("/logout", (req, res, next) => {
+router.get("/logout", (req, res) => {
 	res.clearCookie("userAuthToken").redirect("/");
 });
+
+
 
 module.exports = router;
