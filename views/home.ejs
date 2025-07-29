@@ -6,17 +6,15 @@
 	</head>
 	<body>
 		<%- include("./partials/nav") %>
-		<div
-			class="container mt-4 d-flex justify-content-start align-items-start gap-3 flex-wrap"
-		>
+		<div class="container mt-4 row row-cols-xxl-4 row-cols-xl-3 row-cols-md-2 row-cols-1 mx-auto justify-content-center">
 			<% if (blogs.length > 0) { %> <% blogs.forEach((blog) => { %>
-			<a href="/blog/<%= blog._id %>" class="text-decoration-none">
-				<div class="card mb-3" style="width: 18rem">
+			<a href="/blog/<%= blog._id %>" class="text-decoration-none col mb-4" style="width: 18rem">
+				<div class="card pb-3 mx-auto" >
 					<img
 						src="<%= blog.coverImage %>"
 						class="card-img-top img-fluid object-fit-contain"
 						alt="Blog Cover"
-						style="height: 300px"
+						style="height: 250px"
 					/>
 					<div class="card-body">
 						<h5 class="card-title text-capitalize"><%= blog.title %></h5>
@@ -25,15 +23,24 @@
 							blog.body %>
 						</p>
 					</div>
-					<div class="d-flex px-3 gap-2 justify-content-between">
+					<div class="d-flex px-3 gap-2 justify-content-between align-items-center">
 						<span
-							><p class="text-muted">
+							><p class="text-muted mb-0">
 								<%= new Date(blog.createdAt).toLocaleDateString("en-GB", { day:
 								"2-digit", month: "short", year: "numeric" }) %>
 							</p></span
 						>
-						<span
-							><p class="text-muted">By <%= blog.createdBy.fullName %></p></span
+						<span class="d-flex gap-1 align-items-center">
+							<img
+								src="<%= blog.createdBy.profileImage %>"
+								alt="Profile Image"
+								class="rounded-circle object-fit-cover"
+								width="20"
+								height="20"
+							/>
+							<p class="text-muted mb-0">
+								<%= blog.createdBy.fullName || 'Unknown Author' %>
+							</p></span
 						>
 					</div>
 				</div>
@@ -42,5 +49,6 @@
 			<p>No Blogs Found</p>
 			<% } %>
 		</div>
+		<%- include("./partials/scripts") %>
 	</body>
 </html>

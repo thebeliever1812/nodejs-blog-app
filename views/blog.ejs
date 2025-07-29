@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Home</title>
+		<%- include("./partials/head") %>
+	</head>
+	<body>
+		<%- include("./partials/nav") %>
+		<div class="container mt-4 d-flex justify-content-center align-items-start">
+			<% if (blog) { %>
+			<div class="card mb-3" style="width: 18rem">
+				<img
+					src="<%= blog.coverImage %>"
+					class="card-img-top img-fluid object-fit-cover"
+					alt="Blog Cover"
+				/>
+				<div class="card-body">
+					<h5 class="card-title text-capitalize"><%= blog.title %></h5>
+					<p class="card-text"><%= blog.body %></p>
+				</div>
+				<div
+					class="d-flex pb-3 px-3 gap-2 justify-content-between align-items-center"
+				>
+					<span
+						><p class="text-muted mb-0">
+							<%= new Date(blog.createdAt).toLocaleDateString("en-GB", { day:
+							"2-digit", month: "short", year: "numeric" }) %>
+						</p></span
+					>
+					<span class="d-flex gap-1 align-items-center">
+						<img
+							src="<%= blog.createdBy.profileImage %>"
+							alt="Profile Image"
+							class="rounded-circle object-fit-cover"
+							width="20"
+							height="20"
+						/>
+						<p class="text-muted mb-0">
+							<%= blog.createdBy.fullName || 'Unknown Author' %>
+						</p></span
+					>
+				</div>
+			</div>
+			<% } %>
+		</div>
+		<%- include("./partials/scripts") %>
+	</body>
+</html>

@@ -3,6 +3,7 @@ const multer = require("multer");
 const path = require("path");
 
 const { Blog } = require("../models/blog");
+const { default: mongoose } = require("mongoose");
 
 const router = Router();
 
@@ -59,6 +60,30 @@ router.get("/add-blog", (req, res) => {
 		coverImage: null, // no image
 		error: null,
 	});
+});
+
+router.get("/:blogId", async (req, res) => {
+	try {
+		const blogId = req.params.blogId;
+
+		if (!mongoose.Types.ObjectId.isValid(blogId)) {
+			throw new Error("Blog id is not valid");
+		}
+		const blog = await Blog.findById(blogId).populate("createdBy");
+		if (!blog) {
+			throw new Error("Blog not found");
+		}
+		res.render("blog", {
+			blog: blog,
+			user: req.user,
+		});
+	} catch (error) {
+		res.render("blog", {
+			blog: null,
+			error: error.message,
+			user: req.user,
+		});
+	}
 });
 
 module.exports = router;
