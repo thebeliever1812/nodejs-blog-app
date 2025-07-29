@@ -5,10 +5,42 @@
 		<%- include("./partials/head") %>
 	</head>
 	<body>
-		<%- include("./partials/nav") %> 
-		<% if (locals.user) { %>
-		<p><%= JSON.stringify(user) %></p>
-		<% } %>
-		<%- include("./partials/scripts") %>
+		<%- include("./partials/nav") %>
+		<div
+			class="container mt-4 d-flex justify-content-start align-items-start gap-3 flex-wrap"
+		>
+			<% if (blogs.length > 0) { %> <% blogs.forEach((blog) => { %>
+			<a href="/blog/<%= blog._id %>" class="text-decoration-none">
+				<div class="card mb-3" style="width: 18rem">
+					<img
+						src="<%= blog.coverImage %>"
+						class="card-img-top img-fluid object-fit-contain"
+						alt="Blog Cover"
+						style="height: 300px"
+					/>
+					<div class="card-body">
+						<h5 class="card-title text-capitalize"><%= blog.title %></h5>
+						<p class="card-text">
+							<%= blog.body.length > 30 ? blog.body.substring(0, 30) + "..." :
+							blog.body %>
+						</p>
+					</div>
+					<div class="d-flex px-3 gap-2 justify-content-between">
+						<span
+							><p class="text-muted">
+								<%= new Date(blog.createdAt).toLocaleDateString("en-GB", { day:
+								"2-digit", month: "short", year: "numeric" }) %>
+							</p></span
+						>
+						<span
+							><p class="text-muted">By <%= blog.createdBy.fullName %></p></span
+						>
+					</div>
+				</div>
+			</a>
+			<% }) %> <% } else { %>
+			<p>No Blogs Found</p>
+			<% } %>
+		</div>
 	</body>
 </html>

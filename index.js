@@ -5,6 +5,7 @@ const { connect } = require("mongoose");
 const cookieParser = require("cookie-parser");
 const { checkForUserAuthentication } = require("./middlewares/authentication");
 const blogRoute = require("./routes/blog");
+const { Blog } = require("./models/blog");
 
 const app = express();
 const port = 8000;
@@ -19,16 +20,25 @@ app.use(
 );
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.resolve('./public')));
 app.use(checkForUserAuthentication);
 
 app.set("view engine", "ejs");
 app.set("views", path.resolve("./views"));
 
-app.get("/", (req, res) => {
-	res.render("home", {
-		user: req.user
-	});
+app.get("/", async (req, res) => {
+	try {
+		const allBlogs = await Blog.find().populate('createdBy', "fullName");
+		res.render("home", {
+			user: req.user,
+			blogs: allBlogs || [],
+		});
+	} catch (error) {
+		res.status(500).render("error", {
+			message: "Failed to load blogs. Please try again later.",
+			error,
+		});
+	}
 });
 
 app.use("/user", userRoute);
