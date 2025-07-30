@@ -6,7 +6,9 @@
 	</head>
 	<body>
 		<%- include("./partials/nav") %>
-		<div class="container mt-4 d-flex justify-content-center align-items-start">
+		<div
+			class="container my-4 d-flex flex-column justify-content-center align-items-center"
+		>
 			<% if (blog) { %>
 			<div class="card mb-3" style="width: 18rem">
 				<img
@@ -41,7 +43,51 @@
 					>
 				</div>
 			</div>
-			<% } %>
+
+			<% if (user) { %>
+			<div class="rounded-2 mb-3" style="width: 18rem">
+				<form
+					action="/blog/comment/<%= blog._id %>"
+					method="post"
+					class="d-flex"
+				>
+					<input
+						type="text"
+						class="form-control w-100 rounded-end-0 border-end-0 border-secondary-subtle p-2"
+						placeholder="Comment here..."
+						name="comment"
+						aria-describedby="comment"
+					/>
+					<button type="submit" class="btn btn-outline-primary rounded-start-0">
+						Add
+					</button>
+				</form>
+			</div>
+			<% } %> <% if (comments.length > 0) { %>
+			<div
+				class="border border-secondary-subtle rounded-2 p-2 mb-3"
+				style="width: 18rem"
+			>
+				<h4 class="ps-1">Comments (<%= comments.length %>)</h4>
+				<ul class="list-unstyled mb-0">
+					<% comments.forEach(comment => { %>
+					<li class="d-flex justify-content-start align-items-start gap-1 mb-2">
+						<img
+							src="<%= comment.createdBy.profileImage %>"
+							alt="Profile Image"
+							class="rounded-circle object-fit-cover mt-1"
+							width="30"
+							height="30"
+						/>
+						<div class="d-flex flex-column">
+							<p class="mb-0 text-muted"><%= comment.createdBy.fullName %></p>
+							<p class="mb-0"><%= comment.comment %></p>
+						</div>
+					</li>
+					<% }) %>
+				</ul>
+			</div>
+			<% } %> <% } %>
 		</div>
 		<%- include("./partials/scripts") %>
 	</body>

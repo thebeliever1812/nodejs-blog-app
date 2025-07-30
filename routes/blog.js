@@ -3,6 +3,7 @@ const multer = require("multer");
 const path = require("path");
 
 const { Blog } = require("../models/blog");
+const Comment = require("../models/comment");
 const { default: mongoose } = require("mongoose");
 
 const router = Router();
@@ -62,6 +63,47 @@ router.get("/add-blog", (req, res) => {
 	});
 });
 
+router.post("/comment/:blogId", async (req, res) => {
+	try {
+		const blogId = req.params.blogId;
+		if (!mongoose.Types.ObjectId.isValid(blogId)) {
+			throw new Error("Blog id is not valid");
+		}
+
+		if (!req.body.comment || req.body.comment.trim() === "") {
+			throw new Error("Comment cannot be empty");
+		}
+
+		await Comment.create({
+			comment: req.body.comment,
+			createdBy: req.user._id,
+			blog: blogId,
+		});
+
+		res.redirect(`/blog/${blogId}`);
+	} catch (error) {
+		try {
+			const blog = await Blog.findById(req.params.blogId).populate("createdBy");
+			const comments = await Comment.find({ blog: req.params.blogId }).populate(
+				"createdBy"
+			);
+
+			res.render("blog", {
+				blog,
+				comments,
+				user: req.user,
+				error: error.message,
+			});
+		} catch (innerErr) {
+			// If fetching blog or comments also fails
+			res.render("home", {
+				error: "Something went wrong",
+				user: req.user,
+			});
+		}
+	}
+});
+
 router.get("/:blogId", async (req, res) => {
 	try {
 		const blogId = req.params.blogId;
@@ -73,9 +115,15 @@ router.get("/:blogId", async (req, res) => {
 		if (!blog) {
 			throw new Error("Blog not found");
 		}
+
+		const blogComments = await Comment.find({ blog: blogId }).populate(
+			"createdBy"
+		);
+		console.log(blogComments);
 		res.render("blog", {
 			blog: blog,
 			user: req.user,
+			comments: blogComments,
 		});
 	} catch (error) {
 		res.render("blog", {
