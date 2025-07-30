@@ -119,7 +119,6 @@ router.get("/:blogId", async (req, res) => {
 		const blogComments = await Comment.find({ blog: blogId }).populate(
 			"createdBy"
 		);
-		console.log(blogComments);
 		res.render("blog", {
 			blog: blog,
 			user: req.user,

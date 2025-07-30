@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const path = require("path");
 const userRoute = require("./routes/user");
@@ -8,9 +10,9 @@ const blogRoute = require("./routes/blog");
 const { Blog } = require("./models/blog");
 
 const app = express();
-const port = 8000;
+const PORT = process.env.PORT || 8000;
 
-connect("mongodb://127.0.0.1:27017/Blogg")
+connect(String(process.env.MONGO_URL))
 	.then(() => console.log(`MongoDb connected`))
 	.catch((error) => console.log(`Error connecting MongoDb: ${error}`));
 
@@ -20,7 +22,7 @@ app.use(
 );
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.resolve('./public')));
+app.use(express.static(path.resolve("./public")));
 app.use(checkForUserAuthentication);
 
 app.set("view engine", "ejs");
@@ -28,7 +30,7 @@ app.set("views", path.resolve("./views"));
 
 app.get("/", async (req, res) => {
 	try {
-		const allBlogs = await Blog.find().populate('createdBy');
+		const allBlogs = await Blog.find().populate("createdBy");
 		res.render("home", {
 			user: req.user,
 			blogs: allBlogs || [],
@@ -44,10 +46,10 @@ app.get("/", async (req, res) => {
 app.use("/user", userRoute);
 app.use("/blog", blogRoute);
 
-app.listen(port, (err) => {
+app.listen(PORT, (err) => {
 	if (err) {
 		console.log("Error in starting server: ", err);
 		return;
 	}
-	console.log("Server started at PORT:", port);
+	console.log("Server started at PORT:", PORT);
 });

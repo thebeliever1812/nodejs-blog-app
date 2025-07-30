@@ -32,7 +32,6 @@ router.post("/signup", async (req, res) => {
 		});
 		res.redirect("/");
 	} catch (error) {
-		console.log("Error in signup:", error);
 		return res.render("signup", {
 			error: "Something went wrong. Please try again.",
 		});
@@ -62,7 +61,5 @@ router.post("/signin", async (req, res) => {
 router.get("/logout", (req, res) => {
 	res.clearCookie("userAuthToken").redirect("/");
 });
-
-
 
 module.exports = router;
